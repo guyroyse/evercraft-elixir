@@ -55,4 +55,30 @@ defmodule HeroTest do
     assert Hero.hit_points(context[:subject]) == 5
   end
 
+  test "it goes down when damaged", context do
+    {:ok, hero} = Hero.damage(context[:subject], 3)
+    assert Hero.hit_points(hero) == 2
+  end
+
+  ## alive?
+
+  test "it is alive when undamaged", context do
+    assert Hero.alive?(context[:subject]) == true
+  end
+
+  test "it is alive when damaged but not to 0 hit points", context do
+    {:ok, hero} = Hero.damage(context[:subject], 2)
+    assert Hero.alive?(hero) == true
+  end
+
+  test "it is dead when damaged to 0 hit points", context do
+    {:ok, hero} = Hero.damage(context[:subject], 5)
+    assert Hero.alive?(hero) == false
+  end
+
+  test "it is dead when damaged to below 0 hit points", context do
+    {:ok, hero} = Hero.damage(context[:subject], 10)
+    assert Hero.alive?(hero) == false
+  end
+  
 end

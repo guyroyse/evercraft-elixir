@@ -9,6 +9,7 @@ defprotocol Hero do
   def alignment(hero, value)
   def armor_class(hero)
   def hit_points(hero)
+  def alive?(hero)
   def damage(hero, points)
 end
 
@@ -39,6 +40,10 @@ defimpl Hero, for: HeroData do
 
   def hit_points(hero) do
     hero.hit_points
+  end
+
+  def alive?(hero) do
+    hit_points(hero) > 0
   end
 
   def damage(hero, points) do
