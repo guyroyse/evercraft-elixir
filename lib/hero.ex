@@ -1,5 +1,5 @@
 defmodule HeroData do
-  defstruct name: "", alignment: :neutral
+  defstruct name: "", alignment: :neutral, hit_points: 5
 end
 
 defprotocol Hero do
@@ -9,6 +9,7 @@ defprotocol Hero do
   def alignment(hero, value)
   def armor_class(hero)
   def hit_points(hero)
+  def damage(hero, points)
 end
 
 defimpl Hero, for: HeroData do
@@ -37,7 +38,11 @@ defimpl Hero, for: HeroData do
   end
 
   def hit_points(hero) do
-    5
+    hero.hit_points
+  end
+
+  def damage(hero, points) do
+    {:ok, %{hero | hit_points: hero.hit_points - points}}
   end
 
   defp valid_alignment?(value) do
