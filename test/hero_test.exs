@@ -55,5 +55,4 @@ defmodule HeroTest do
     assert Hero.hit_points(context[:subject]) == 5
   end
 
-
 end
