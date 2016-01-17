@@ -18,23 +18,19 @@ defmodule HeroTest do
   test "it has a default alignment of neutral", context do
     assert Hero.alignment(context[:subject]) == :neutral
   end
-
   test "it can be good", context do
     {:ok, hero} = Hero.alignment(context[:subject], :good)
     assert Hero.alignment(hero) == :good
   end
-
   test "it can be neutral", context do
     {:ok, hero} = Hero.alignment(context[:subject], :good)
     {:ok, hero} = Hero.alignment(hero, :neutral)
     assert Hero.alignment(hero) == :neutral
   end
-
   test "it can be evil", context do
     {:ok, hero} = Hero.alignment(context[:subject], :evil)
     assert Hero.alignment(hero) == :evil
   end
-
   test "it cannot be invalid", context do
     {:error, reason} = Hero.alignment(context[:subject], :emo)
     assert reason == "invalid alignment"
@@ -49,7 +45,6 @@ defmodule HeroTest do
   test "it has default hit points of 5", context do
     assert Hero.hit_points(context[:subject]) == 5
   end
-
   test "it goes down when damaged", context do
     {:ok, hero} = Hero.damage(context[:subject], 3)
     assert Hero.hit_points(hero) == 2
@@ -59,17 +54,14 @@ defmodule HeroTest do
   test "it is alive when undamaged", context do
     assert Hero.alive?(context[:subject]) == true
   end
-
   test "it is alive when damaged but not to 0 hit points", context do
     {:ok, hero} = Hero.damage(context[:subject], 2)
     assert Hero.alive?(hero) == true
   end
-
   test "it is dead when damaged to 0 hit points", context do
     {:ok, hero} = Hero.damage(context[:subject], 5)
     assert Hero.alive?(hero) == false
   end
-
   test "it is dead when damaged to below 0 hit points", context do
     {:ok, hero} = Hero.damage(context[:subject], 10)
     assert Hero.alive?(hero) == false
