@@ -1,5 +1,5 @@
 defmodule HeroData do
-  defstruct name: "", alignment: :neutral, hit_points: 5
+  defstruct name: "", alignment: :neutral, dexterity: %AbilityData{}, hit_points: 5
 end
 
 defprotocol Hero do
@@ -7,6 +7,9 @@ defprotocol Hero do
   def name(hero, value)
   def alignment(hero)
   def alignment(hero, value)
+  def ability_score(hero, ability)
+  def ability_score(hero, ability, value)
+  def ability_modifier(hero, ability)
   def armor_class(hero)
   def hit_points(hero)
   def alive?(hero)
@@ -32,6 +35,16 @@ defimpl Hero, for: HeroData do
       valid_alignment? value -> {:ok, %{hero | alignment: value}}
       true -> {:error, "invalid alignment"}
     end
+  end
+
+  def ability_score(hero, ability) do
+    hero[ability].score
+  end
+
+  def ability_score(hero, ability, value) do
+  end
+
+  def ability_modifier(hero, ability) do
   end
 
   def armor_class(hero) do

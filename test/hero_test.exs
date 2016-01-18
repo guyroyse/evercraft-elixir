@@ -36,6 +36,15 @@ defmodule HeroTest do
     assert reason == "invalid alignment"
   end
 
+  ## abilities
+  # test "it has expected abilities, scores, and modifiers", context do
+  #   Enum.each([:dexterity], fn(ability) ->
+  #     # {:ok, hero} = Hero.ability_score(context[:subject], ability, 15)
+  #     assert Hero.ability_score(context[:subject], ability) == 10
+  #     # assert Hero.ability_modifier(hero, ability) == 2
+  #   end)
+  # end
+
   ## armor class
   test "it has default armor class of 10", context do
     assert Hero.armor_class(context[:subject]) == 10
