@@ -65,6 +65,10 @@ defmodule HeroTest do
   test "it has default armor class of 10", context do
     assert Hero.armor_class(context[:subject]) == 10
   end
+  test "it adds dex modifier to armor class", context do
+    {:ok, hero} = Hero.ability_score(context[:subject], :dex, 15)
+    assert Hero.armor_class(hero) == 12
+  end
 
   ## hit points
   test "it has default hit points of 5", context do

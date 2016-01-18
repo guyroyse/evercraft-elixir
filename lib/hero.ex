@@ -46,8 +46,8 @@ defmodule Hero do
     Ability.modifier(hero[ability])
   end
 
-  def armor_class(_) do
-    10
+  def armor_class(hero) do
+    10 + ability_modifier(hero, :dex)
   end
 
   def hit_points(hero) do
