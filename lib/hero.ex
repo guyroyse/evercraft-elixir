@@ -52,7 +52,7 @@ defmodule Hero do
   end
 
   def max_hit_points(hero) do
-    max(1, 5 + ability_modifier(hero, :con))
+    max(1, 5 + ability_modifier(hero, :con)) * level(hero)
   end
 
   def hit_points(hero) do
