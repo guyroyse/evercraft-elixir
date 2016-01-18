@@ -154,4 +154,19 @@ defmodule HeroTest do
     assert Hero.experience(hero) == 50
   end
 
+  ## level
+  test "it has a defauilt level of 1", context do
+    assert Hero.level(context[:subject]) == 1
+  end
+  test "it goes up a level every 1000 experience points", context do
+    {:ok, hero} = Hero.add_experience(context[:subject], 999) ## 999
+    assert Hero.level(hero) == 1
+    {:ok, hero} = Hero.add_experience(hero, 1) ## 1,000
+    assert Hero.level(hero) == 2
+    {:ok, hero} = Hero.add_experience(hero, 999) ## 1,999
+    assert Hero.level(hero) == 2
+    {:ok, hero} = Hero.add_experience(hero, 1) ## 2,000
+    assert Hero.level(hero) == 3
+  end
+
 end

@@ -79,12 +79,16 @@ defmodule Hero do
     hero.experience
   end
 
+  def level(hero) do
+    div(hero.experience, 1000) + 1
+  end
+
   def damage(hero, points) do
     {:ok, %{hero | damage: hero.damage + points}}
   end
 
   def add_experience(hero, points) do
-    {:ok, %{hero | experience: hero.experience + points}}    
+    {:ok, %{hero | experience: hero.experience + points}}
   end
 
   defp valid_alignment?(value) do
