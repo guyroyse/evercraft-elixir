@@ -1,14 +1,8 @@
-defmodule AbilityData do
-  defstruct score: 10
-end
+defmodule Ability do
 
-defprotocol Ability do
-  def score(ability)
-  def score(ability, value)
-  def modifier(ability)
-end
-
-defimpl Ability, for: AbilityData do
+  def create() do
+    %{ score: 10 }
+  end
 
   def score(ability) do
     ability.score

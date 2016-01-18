@@ -2,7 +2,7 @@ defmodule AttackTest do
   use ExUnit.Case
 
   setup do
-    {:ok, attacker: %HeroData{}, defender: %HeroData{} }
+    {:ok, attacker: Hero.create(), defender: Hero.create() }
   end
 
   test "it misses when roll is less than armor class", context do

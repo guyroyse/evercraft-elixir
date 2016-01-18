@@ -1,22 +1,15 @@
-defmodule HeroData do
-  defstruct name: "", alignment: :neutral, dexterity: %AbilityData{}, hit_points: 5
-end
+defmodule Hero do
 
-defprotocol Hero do
-  def name(hero)
-  def name(hero, value)
-  def alignment(hero)
-  def alignment(hero, value)
-  def ability_score(hero, ability)
-  def ability_score(hero, ability, value)
-  def ability_modifier(hero, ability)
-  def armor_class(hero)
-  def hit_points(hero)
-  def alive?(hero)
-  def damage(hero, points)
-end
-
-defimpl Hero, for: HeroData do
+  def create() do
+    %{
+      name: "",
+      alignment: :neutral,
+      hit_points: 5,
+      str: Ability.create(),
+      dex: Ability.create(),
+      con: Ability.create()
+    }
+  end
 
   def name(hero) do
     hero.name
@@ -38,16 +31,22 @@ defimpl Hero, for: HeroData do
   end
 
   def ability_score(hero, ability) do
-    hero[ability].score
+    Ability.score(hero[ability])
   end
 
   def ability_score(hero, ability, value) do
+    case Ability.score(hero[ability], value) do
+      {:ok, new_ability} -> {:ok, %{ hero | ability => new_ability } }
+      {status, result} -> {status, result}
+    end
+
   end
 
   def ability_modifier(hero, ability) do
+    Ability.modifier(hero[ability])
   end
 
-  def armor_class(hero) do
+  def armor_class(_) do
     10
   end
 

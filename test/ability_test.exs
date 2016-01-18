@@ -2,7 +2,7 @@ defmodule AbilityTest do
   use ExUnit.Case
 
   setup do
-    {:ok, subject: %AbilityData{} }
+    {:ok, subject: Ability.create() }
   end
 
   ## score
