@@ -7,7 +7,8 @@ defmodule Hero do
       damage: 0,
       str: Ability.create(),
       dex: Ability.create(),
-      con: Ability.create()
+      con: Ability.create(),
+      experience: 0
     }
   end
 
@@ -74,8 +75,16 @@ defmodule Hero do
     max(1, 2 * base_damage(hero))
   end
 
+  def experience(hero) do
+    hero.experience
+  end
+
   def damage(hero, points) do
     {:ok, %{hero | damage: hero.damage + points}}
+  end
+
+  def add_experience(hero, points) do
+    {:ok, %{hero | experience: hero.experience + points}}    
   end
 
   defp valid_alignment?(value) do

@@ -144,4 +144,14 @@ defmodule HeroTest do
     assert Hero.critical_damage(hero) == 1
   end
 
+  ## experience points
+  test "it has default xp of 0", context do
+    assert Hero.experience(context[:subject]) == 0
+  end
+  test "experience can be added to", context do
+    {:ok, hero} = Hero.add_experience(context[:subject], 25)
+    {:ok, hero} = Hero.add_experience(hero, 25)
+    assert Hero.experience(hero) == 50
+  end
+
 end
