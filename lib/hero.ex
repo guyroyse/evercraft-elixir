@@ -4,7 +4,7 @@ defmodule Hero do
     %{
       name: "",
       alignment: :neutral,
-      hit_points: 5,
+      damage: 0,
       str: Ability.create(),
       dex: Ability.create(),
       con: Ability.create()
@@ -50,8 +50,12 @@ defmodule Hero do
     10 + ability_modifier(hero, :dex)
   end
 
+  def max_hit_points(hero) do
+    max(1, 5 + ability_modifier(hero, :con))
+  end
+
   def hit_points(hero) do
-    hero.hit_points
+    max_hit_points(hero) - hero.damage
   end
 
   def alive?(hero) do
@@ -59,7 +63,7 @@ defmodule Hero do
   end
 
   def damage(hero, points) do
-    {:ok, %{hero | hit_points: hero.hit_points - points}}
+    {:ok, %{hero | damage: hero.damage + points}}
   end
 
   defp valid_alignment?(value) do

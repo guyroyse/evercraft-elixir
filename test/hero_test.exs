@@ -70,8 +70,21 @@ defmodule HeroTest do
     assert Hero.armor_class(hero) == 12
   end
 
+  ## max hit points
+  test "it has default max hit points of 5", context do
+    assert Hero.hit_points(context[:subject]) == 5
+  end
+  test "it add con modifier to max hit points", context do
+    {:ok, hero} = Hero.ability_score(context[:subject], :con, 15)
+    assert Hero.hit_points(hero) == 7
+  end
+  test "it cannot have less than 0 max hit points regardless of con modifier", context do
+    {:ok, hero} = Hero.ability_score(context[:subject], :con, 1)
+    assert Hero.hit_points(hero) == 1
+  end
+
   ## hit points
-  test "it has default hit points of 5", context do
+  test "it has max hit points as hit point when undamaged", context do
     assert Hero.hit_points(context[:subject]) == 5
   end
   test "it goes down when damaged", context do
