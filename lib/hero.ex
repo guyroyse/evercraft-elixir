@@ -62,6 +62,18 @@ defmodule Hero do
     hit_points(hero) > 0
   end
 
+  def attack_modifier(hero) do
+    ability_modifier(hero, :str)
+  end
+
+  def attack_damage(hero) do
+    max(1, base_damage(hero))
+  end
+
+  def critical_damage(hero) do
+    max(1, 2 * base_damage(hero))
+  end
+
   def damage(hero, points) do
     {:ok, %{hero | damage: hero.damage + points}}
   end
@@ -70,4 +82,7 @@ defmodule Hero do
     [:good, :neutral, :evil] |> Enum.filter(&(&1 == value)) |> Enum.empty? == false
   end
 
+  defp base_damage(hero) do
+    1 + ability_modifier(hero, :str)
+  end
 end

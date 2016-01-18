@@ -109,4 +109,39 @@ defmodule HeroTest do
     assert Hero.alive?(hero) == false
   end
 
+  ## attack modifier
+  test "it has default attack modifier of 0", context do
+    assert Hero.attack_modifier(context[:subject]) == 0
+  end
+  test "it adds str modifier to attack modifier", context do
+    {:ok, hero} = Hero.ability_score(context[:subject], :str, 15)
+    assert Hero.attack_modifier(hero) == +2
+  end
+
+  ## attack damage
+  test "it has default attack damage of 1", context do
+    assert Hero.attack_damage(context[:subject]) == 1
+  end
+  test "it adds str modifier to attack damage", context do
+    {:ok, hero} = Hero.ability_score(context[:subject], :str, 15)
+    assert Hero.attack_damage(hero) == 3
+  end
+  test "it cannot do less than 1 point of damage regardless of str modifier", context do
+    {:ok, hero} = Hero.ability_score(context[:subject], :str, 6)
+    assert Hero.attack_damage(hero) == 1
+  end
+
+  ## critical damage
+  test "it has default critical damage of 2", context do
+    assert Hero.critical_damage(context[:subject]) == 2
+  end
+  test "it adds double the str modifier to attack damage", context do
+    {:ok, hero} = Hero.ability_score(context[:subject], :str, 15)
+    assert Hero.critical_damage(hero) == 6
+  end
+  test "it cannot do less than 1 point of damage on a crit regardless of str modifier", context do
+    {:ok, hero} = Hero.ability_score(context[:subject], :str, 6)
+    assert Hero.critical_damage(hero) == 1
+  end
+
 end
