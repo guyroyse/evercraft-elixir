@@ -64,7 +64,7 @@ defmodule Hero do
   end
 
   def attack_modifier(hero) do
-    ability_modifier(hero, :str)
+    div(level(hero), 2) + ability_modifier(hero, :str)
   end
 
   def attack_damage(hero) do

@@ -127,6 +127,12 @@ defmodule HeroTest do
   test "it has default attack modifier of 0", context do
     assert Hero.attack_modifier(context[:subject]) == 0
   end
+  test "it add +1 to attack modifier at even levels", context do
+    Enum.each([{1000, +1}, {2000, +1}, {3000, +2}, {4000, +2}], fn({xp, modifier}) ->
+      {:ok, hero} = Hero.add_experience(context[:subject], xp)
+      assert Hero.attack_modifier(hero) == modifier
+    end)
+  end
   test "it adds str modifier to attack modifier", context do
     {:ok, hero} = Hero.ability_score(context[:subject], :str, 15)
     assert Hero.attack_modifier(hero) == +2
@@ -173,14 +179,10 @@ defmodule HeroTest do
     assert Hero.level(context[:subject]) == 1
   end
   test "it goes up a level every 1000 experience points", context do
-    {:ok, hero} = Hero.add_experience(context[:subject], 999) ## 999
-    assert Hero.level(hero) == 1
-    {:ok, hero} = Hero.add_experience(hero, 1) ## 1,000
-    assert Hero.level(hero) == 2
-    {:ok, hero} = Hero.add_experience(hero, 999) ## 1,999
-    assert Hero.level(hero) == 2
-    {:ok, hero} = Hero.add_experience(hero, 1) ## 2,000
-    assert Hero.level(hero) == 3
+    Enum.each([{999, 1}, {1000, 2}, {1999, 2}, {2000, 3}], fn({xp, level}) ->
+      {:ok, hero} = Hero.add_experience(context[:subject], xp)
+      assert Hero.level(hero) == level
+    end)
   end
 
 end
