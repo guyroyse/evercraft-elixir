@@ -27,19 +27,19 @@ defmodule AttackTest do
 
   test "it does not damage oppoent on a miss", context do
     {:miss, _, defender} = Attack.attack(context[:attacker], context[:defender], 5)
-    assert Hero.hit_points(defender) == 5
+    assert Hero.HitPoints.current(defender) == 5
   end
 
   test "it applies attack damage to opponent on a hit", context do
     {:ok, attacker} = Hero.Ability.score(context[:attacker], :str, 12)  ## attack damage = 2
     {:hit, attacker, defender} = Attack.attack(attacker, context[:defender], 15)
-    assert Hero.hit_points(defender) == 5 - Hero.attack_damage(attacker)
+    assert Hero.HitPoints.current(defender) == 5 - Hero.Attack.damage(attacker)
   end
 
   test "it applies critical damage to opponent on a critical", context do
     {:ok, attacker} = Hero.Ability.score(context[:attacker], :str, 12)  ## crit damage = 4
     {:critical, attacker, defender} = Attack.attack(attacker, context[:defender], 20)
-    assert Hero.hit_points(defender) == 5 - Hero.critical_damage(attacker)
+    assert Hero.HitPoints.current(defender) == 5 - Hero.Attack.critical_damage(attacker)
   end
 
   test "it adds attack modifer to attack roll", context do

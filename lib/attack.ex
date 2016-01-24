@@ -19,16 +19,16 @@ defmodule Attack do
   end
 
   defp damage(attacker, defender, attack_result) do
-    {:ok, defender} = Hero.damage(defender, calculate_damage(attacker, attack_result))
+    {:ok, defender} = Hero.HitPoints.damage(defender, calculate_damage(attacker, attack_result))
     defender
   end
 
   defp calculate_damage(attacker, attack_result) when attack_result == :hit do
-    Hero.attack_damage(attacker)
+    Hero.Attack.damage(attacker)
   end
 
   defp calculate_damage(attacker, attack_result) when attack_result == :critical do
-    Hero.critical_damage(attacker)
+    Hero.Attack.critical_damage(attacker)
   end
 
   defp armor_class(defender) do
@@ -36,7 +36,7 @@ defmodule Attack do
   end
 
   defp adjusted_roll(roll, attacker) do
-    roll + Hero.attack_modifier(attacker)
+    roll + Hero.Attack.modifier(attacker)
   end
 
   defp add_experience(attacker, attack_result) when attack_result == :miss do

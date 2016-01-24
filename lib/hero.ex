@@ -35,40 +35,12 @@ defmodule Hero do
     10 + Hero.Ability.modifier(hero, :dex)
   end
 
-  def max_hit_points(hero) do
-    max(1, 5 + Hero.Ability.modifier(hero, :con)) * level(hero)
-  end
-
-  def hit_points(hero) do
-    max_hit_points(hero) - hero.damage
-  end
-
-  def alive?(hero) do
-    hit_points(hero) > 0
-  end
-
-  def attack_modifier(hero) do
-    div(level(hero), 2) + Hero.Ability.modifier(hero, :str)
-  end
-
-  def attack_damage(hero) do
-    max(1, base_damage(hero))
-  end
-
-  def critical_damage(hero) do
-    max(1, 2 * base_damage(hero))
-  end
-
   def experience(hero) do
     hero.experience
   end
 
   def level(hero) do
     div(hero.experience, 1000) + 1
-  end
-
-  def damage(hero, points) do
-    {:ok, %{hero | damage: hero.damage + points}}
   end
 
   def add_experience(hero, points) do
@@ -79,7 +51,4 @@ defmodule Hero do
     [:good, :neutral, :evil] |> Enum.filter(&(&1 == value)) |> Enum.empty? == false
   end
 
-  defp base_damage(hero) do
-    1 + Hero.Ability.modifier(hero, :str)
-  end
 end
