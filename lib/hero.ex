@@ -31,24 +31,12 @@ defmodule Hero do
     end
   end
 
-  def ability_score(hero, ability) do
-    Hero.Ability.score(hero, ability)
-  end
-
-  def ability_score(hero, ability, value) do
-    Hero.Ability.score(hero, ability, value)
-  end
-
-  def ability_modifier(hero, ability) do
-    Hero.Ability.modifier(hero, ability)
-  end
-
   def armor_class(hero) do
-    10 + ability_modifier(hero, :dex)
+    10 + Hero.Ability.modifier(hero, :dex)
   end
 
   def max_hit_points(hero) do
-    max(1, 5 + ability_modifier(hero, :con)) * level(hero)
+    max(1, 5 + Hero.Ability.modifier(hero, :con)) * level(hero)
   end
 
   def hit_points(hero) do
@@ -60,7 +48,7 @@ defmodule Hero do
   end
 
   def attack_modifier(hero) do
-    div(level(hero), 2) + ability_modifier(hero, :str)
+    div(level(hero), 2) + Hero.Ability.modifier(hero, :str)
   end
 
   def attack_damage(hero) do
@@ -92,7 +80,7 @@ defmodule Hero do
   end
 
   defp base_damage(hero) do
-    1 + ability_modifier(hero, :str)
+    1 + Hero.Ability.modifier(hero, :str)
   end
 end
 

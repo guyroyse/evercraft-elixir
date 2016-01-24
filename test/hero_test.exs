@@ -39,25 +39,25 @@ defmodule HeroTest do
   ## abilities
   test "it has expected abilities", context do
     Enum.each([:str, :dex, :con], fn(ability) ->
-      assert Hero.ability_score(context[:subject], ability) == 10
+      assert Hero.Ability.score(context[:subject], ability) == 10
     end)
   end
   test "it has settable abilities", context do
     Enum.each([:str, :dex, :con], fn(ability) ->
-      {:ok, hero} = Hero.ability_score(context[:subject], ability, 15)
-      assert Hero.ability_score(hero, ability) == 15
+      {:ok, hero} = Hero.Ability.score(context[:subject], ability, 15)
+      assert Hero.Ability.score(hero, ability) == 15
     end)
   end
   test "it complains about out of range abilities", context do
     Enum.each([:str, :dex, :con], fn(ability) ->
-      {:error, reason} = Hero.ability_score(context[:subject], ability, 25)
+      {:error, reason} = Hero.Ability.score(context[:subject], ability, 25)
       assert reason == "invalid score"
     end)
   end
   test "it has expected ability modifiers", context do
     Enum.each([:str, :dex, :con], fn(ability) ->
-      {:ok, hero} = Hero.ability_score(context[:subject], ability, 15)
-      assert Hero.ability_modifier(hero, ability) == +2
+      {:ok, hero} = Hero.Ability.score(context[:subject], ability, 15)
+      assert Hero.Ability.modifier(hero, ability) == +2
     end)
   end
 
@@ -66,7 +66,7 @@ defmodule HeroTest do
     assert Hero.armor_class(context[:subject]) == 10
   end
   test "it adds dex modifier to armor class", context do
-    {:ok, hero} = Hero.ability_score(context[:subject], :dex, 15)
+    {:ok, hero} = Hero.Ability.score(context[:subject], :dex, 15)
     assert Hero.armor_class(hero) == 12
   end
 
@@ -79,21 +79,21 @@ defmodule HeroTest do
     assert Hero.hit_points(hero) == 15
   end
   test "it add con modifier to max hit points", context do
-    {:ok, hero} = Hero.ability_score(context[:subject], :con, 15)
+    {:ok, hero} = Hero.Ability.score(context[:subject], :con, 15)
     assert Hero.hit_points(hero) == 7
   end
   test "it add con modifier to max hit points for each level", context do
     {:ok, hero} = Hero.add_experience(context[:subject], 2000) ## level = 3
-    {:ok, hero} = Hero.ability_score(hero, :con, 15)
+    {:ok, hero} = Hero.Ability.score(hero, :con, 15)
     assert Hero.hit_points(hero) == 21
   end
   test "it cannot have less than 1 max hit points regardless of con modifier", context do
-    {:ok, hero} = Hero.ability_score(context[:subject], :con, 1)
+    {:ok, hero} = Hero.Ability.score(context[:subject], :con, 1)
     assert Hero.hit_points(hero) == 1
   end
   test "it cannot have less than 1 max hit points per level regardless of con modifier", context do
     {:ok, hero} = Hero.add_experience(context[:subject], 2000) ## level = 3
-    {:ok, hero} = Hero.ability_score(hero, :con, 1)
+    {:ok, hero} = Hero.Ability.score(hero, :con, 1)
     assert Hero.hit_points(hero) == 3
   end
 
@@ -134,7 +134,7 @@ defmodule HeroTest do
     end)
   end
   test "it adds str modifier to attack modifier", context do
-    {:ok, hero} = Hero.ability_score(context[:subject], :str, 15)
+    {:ok, hero} = Hero.Ability.score(context[:subject], :str, 15)
     assert Hero.attack_modifier(hero) == +2
   end
 
@@ -143,11 +143,11 @@ defmodule HeroTest do
     assert Hero.attack_damage(context[:subject]) == 1
   end
   test "it adds str modifier to attack damage", context do
-    {:ok, hero} = Hero.ability_score(context[:subject], :str, 15)
+    {:ok, hero} = Hero.Ability.score(context[:subject], :str, 15)
     assert Hero.attack_damage(hero) == 3
   end
   test "it cannot do less than 1 point of damage regardless of str modifier", context do
-    {:ok, hero} = Hero.ability_score(context[:subject], :str, 6)
+    {:ok, hero} = Hero.Ability.score(context[:subject], :str, 6)
     assert Hero.attack_damage(hero) == 1
   end
 
@@ -156,11 +156,11 @@ defmodule HeroTest do
     assert Hero.critical_damage(context[:subject]) == 2
   end
   test "it adds double the str modifier to attack damage", context do
-    {:ok, hero} = Hero.ability_score(context[:subject], :str, 15)
+    {:ok, hero} = Hero.Ability.score(context[:subject], :str, 15)
     assert Hero.critical_damage(hero) == 6
   end
   test "it cannot do less than 1 point of damage on a crit regardless of str modifier", context do
-    {:ok, hero} = Hero.ability_score(context[:subject], :str, 6)
+    {:ok, hero} = Hero.Ability.score(context[:subject], :str, 6)
     assert Hero.critical_damage(hero) == 1
   end
 
