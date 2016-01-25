@@ -1,7 +1,7 @@
 defmodule Hero.HitPoints do
 
   def maximum(hero) do
-    max(1, 5 + Hero.Ability.modifier(hero, :con)) * Hero.level(hero)
+    per_level(hero) * Hero.level(hero)
   end
 
   def current(hero) do
@@ -14,6 +14,17 @@ defmodule Hero.HitPoints do
 
   def damage(hero, points) do
     {:ok, %{hero | damage: hero.damage + points}}
+  end
+
+  defp per_level(hero) do
+    max(1, for_class(hero) + Hero.Ability.modifier(hero, :con))
+  end
+
+  defp for_class(hero) do
+    case Hero.class(hero) do
+      :fighter -> 10
+      :no_class -> 5
+    end
   end
 
 end

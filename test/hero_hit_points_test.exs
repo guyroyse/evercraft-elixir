@@ -13,11 +13,11 @@ defmodule HeroHitPointsTest do
     {:ok, hero} = Hero.add_experience(context[:subject], 2000) ## level = 3
     assert Hero.HitPoints.current(hero) == 15
   end
-  test "it add con modifier to max hit points", context do
+  test "it adds con modifier to max hit points", context do
     {:ok, hero} = Hero.Ability.score(context[:subject], :con, 15)
     assert Hero.HitPoints.current(hero) == 7
   end
-  test "it add con modifier to max hit points for each level", context do
+  test "it adds con modifier to max hit points for each level", context do
     {:ok, hero} = Hero.add_experience(context[:subject], 2000) ## level = 3
     {:ok, hero} = Hero.Ability.score(hero, :con, 15)
     assert Hero.HitPoints.current(hero) == 21
@@ -30,6 +30,17 @@ defmodule HeroHitPointsTest do
     {:ok, hero} = Hero.add_experience(context[:subject], 2000) ## level = 3
     {:ok, hero} = Hero.Ability.score(hero, :con, 1)
     assert Hero.HitPoints.current(hero) == 3
+  end
+
+  ## max hit points - when a fighter
+  test "when a fighter it has default max hit points of 10", context do
+    {:ok, hero} = Hero.class(context[:subject], :fighter)
+    assert Hero.HitPoints.current(hero) == 10
+  end
+  test "when a fighter it has 10 max hit points per level", context do
+    {:ok, hero} = Hero.class(context[:subject], :fighter)
+    {:ok, hero} = Hero.add_experience(hero, 2000) ## level = 3
+    assert Hero.HitPoints.current(hero) == 30
   end
 
   ## hit points

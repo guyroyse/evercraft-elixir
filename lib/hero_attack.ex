@@ -1,7 +1,7 @@
 defmodule Hero.Attack do
 
   def modifier(hero) do
-    div(Hero.level(hero), 2) + Hero.Ability.modifier(hero, :str)
+    base_modifier(hero) + Hero.Ability.modifier(hero, :str)
   end
 
   def damage(hero) do
@@ -10,6 +10,17 @@ defmodule Hero.Attack do
 
   def critical_damage(hero) do
     max(1, 2 * base_damage(hero))
+  end
+
+  defp base_modifier(hero) do
+    trunc(Hero.level(hero) * modifier_per_level(hero))
+  end
+
+  defp modifier_per_level(hero) do
+    case Hero.class(hero) do
+      :fighter ->  1
+      :no_class -> 1 / 2
+    end
   end
 
   defp base_damage(hero) do

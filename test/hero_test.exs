@@ -14,37 +14,6 @@ defmodule HeroTest do
     assert Hero.name(hero) == "Bob the Barbarian"
   end
 
-  ## alignment
-  test "it has a default alignment of neutral", context do
-    assert Hero.alignment(context[:subject]) == :neutral
-  end
-  test "it can be good", context do
-    {:ok, hero} = Hero.alignment(context[:subject], :good)
-    assert Hero.alignment(hero) == :good
-  end
-  test "it can be neutral", context do
-    {:ok, hero} = Hero.alignment(context[:subject], :good)
-    {:ok, hero} = Hero.alignment(hero, :neutral)
-    assert Hero.alignment(hero) == :neutral
-  end
-  test "it can be evil", context do
-    {:ok, hero} = Hero.alignment(context[:subject], :evil)
-    assert Hero.alignment(hero) == :evil
-  end
-  test "it cannot be invalid", context do
-    {:error, reason} = Hero.alignment(context[:subject], :emo)
-    assert reason == "invalid alignment"
-  end
-
-  ## armor class
-  test "it has default armor class of 10", context do
-    assert Hero.armor_class(context[:subject]) == 10
-  end
-  test "it adds dex modifier to armor class", context do
-    {:ok, hero} = Hero.Ability.score(context[:subject], :dex, 15)
-    assert Hero.armor_class(hero) == 12
-  end
-
   ## experience points
   test "it has default xp of 0", context do
     assert Hero.experience(context[:subject]) == 0
@@ -64,6 +33,55 @@ defmodule HeroTest do
       {:ok, hero} = Hero.add_experience(context[:subject], xp)
       assert Hero.level(hero) == level
     end)
+  end
+
+  ## class
+  test "it has a default class of :no_class", context do
+    assert Hero.class(context[:subject]) == :no_class
+  end
+  test "it can be classless", context do
+    {:ok, hero} = Hero.class(context[:subject], :fighter)
+    {:ok, hero} = Hero.class(hero, :no_class)
+    assert Hero.class(hero) == :no_class
+  end
+  test "it can be a fighter", context do
+    {:ok, hero} = Hero.class(context[:subject], :fighter)
+    assert Hero.class(hero) == :fighter
+  end
+  test "it cannot be an invalid class", context do
+    {:error, reason} = Hero.class(context[:subject], :poser)
+    assert reason == "invalid class"
+  end
+
+  ## alignment
+  test "it has a default alignment of neutral", context do
+    assert Hero.alignment(context[:subject]) == :neutral
+  end
+  test "it can be good", context do
+    {:ok, hero} = Hero.alignment(context[:subject], :good)
+    assert Hero.alignment(hero) == :good
+  end
+  test "it can be neutral", context do
+    {:ok, hero} = Hero.alignment(context[:subject], :good)
+    {:ok, hero} = Hero.alignment(hero, :neutral)
+    assert Hero.alignment(hero) == :neutral
+  end
+  test "it can be evil", context do
+    {:ok, hero} = Hero.alignment(context[:subject], :evil)
+    assert Hero.alignment(hero) == :evil
+  end
+  test "it cannot be an invalid alignment", context do
+    {:error, reason} = Hero.alignment(context[:subject], :emo)
+    assert reason == "invalid alignment"
+  end
+
+  ## armor class
+  test "it has default armor class of 10", context do
+    assert Hero.armor_class(context[:subject]) == 10
+  end
+  test "it adds dex modifier to armor class", context do
+    {:ok, hero} = Hero.Ability.score(context[:subject], :dex, 15)
+    assert Hero.armor_class(hero) == 12
   end
 
 end

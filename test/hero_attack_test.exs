@@ -20,6 +20,19 @@ defmodule HeroAttackTest do
     assert Hero.Attack.modifier(hero) == +2
   end
 
+  ## attack modifier - when a fighter
+  test "when a fighter it has default attack modifier of +1", context do
+    {:ok, hero} = Hero.class(context[:subject], :fighter)
+    assert Hero.Attack.modifier(hero) == +1
+  end
+  test "when a fighter it add +1 to attack modifier at every level", context do
+    Enum.each([{1000, +2}, {2000, +3}, {3000, +4}, {4000, +5}], fn({xp, modifier}) ->
+      {:ok, hero} = Hero.class(context[:subject], :fighter)
+      {:ok, hero} = Hero.add_experience(hero, xp)
+      assert Hero.Attack.modifier(hero) == modifier
+    end)
+  end
+
   ## attack damage
   test "it has default attack damage of 1", context do
     assert Hero.Attack.damage(context[:subject]) == 1
