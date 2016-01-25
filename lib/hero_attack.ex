@@ -13,7 +13,7 @@ defmodule Hero.Attack do
   end
 
   defp base_modifier(hero) do
-    trunc(Hero.level(hero) * modifier_per_level(hero))
+    trunc(Hero.Experience.level(hero) * modifier_per_level(hero))
   end
 
   defp modifier_per_level(hero) do

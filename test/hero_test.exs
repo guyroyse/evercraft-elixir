@@ -14,27 +14,6 @@ defmodule HeroTest do
     assert Hero.name(hero) == "Bob the Barbarian"
   end
 
-  ## experience points
-  test "it has default xp of 0", context do
-    assert Hero.experience(context[:subject]) == 0
-  end
-  test "experience can be added to", context do
-    {:ok, hero} = Hero.add_experience(context[:subject], 25)
-    {:ok, hero} = Hero.add_experience(hero, 25)
-    assert Hero.experience(hero) == 50
-  end
-
-  ## level
-  test "it has a defauilt level of 1", context do
-    assert Hero.level(context[:subject]) == 1
-  end
-  test "it goes up a level every 1000 experience points", context do
-    Enum.each([{999, 1}, {1000, 2}, {1999, 2}, {2000, 3}], fn({xp, level}) ->
-      {:ok, hero} = Hero.add_experience(context[:subject], xp)
-      assert Hero.level(hero) == level
-    end)
-  end
-
   ## class
   test "it has a default class of :no_class", context do
     assert Hero.class(context[:subject]) == :no_class

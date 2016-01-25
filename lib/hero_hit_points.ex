@@ -1,7 +1,7 @@
 defmodule Hero.HitPoints do
 
   def maximum(hero) do
-    per_level(hero) * Hero.level(hero)
+    per_level(hero) * Hero.Experience.level(hero)
   end
 
   def current(hero) do

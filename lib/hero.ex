@@ -21,14 +21,6 @@ defmodule Hero do
     {:ok, %{hero | name: value}}
   end
 
-  def experience(hero) do
-    hero.experience
-  end
-
-  def level(hero) do
-    div(hero.experience, 1000) + 1
-  end
-
   def class(hero) do
     hero.class
   end
@@ -55,10 +47,6 @@ defmodule Hero do
 
   def armor_class(hero) do
     10 + Hero.Ability.modifier(hero, :dex)
-  end
-
-  def add_experience(hero, points) do
-    {:ok, %{hero | experience: hero.experience + points}}
   end
 
   defp valid_alignment?(value) do

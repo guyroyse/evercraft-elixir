@@ -44,7 +44,7 @@ defmodule Attack do
   end
 
   defp add_experience(attacker, attack_result) do
-    {:ok, attacker} = Hero.add_experience(attacker, 10)
+    {:ok, attacker} = Hero.Experience.add(attacker, 10)
     attacker
   end
 

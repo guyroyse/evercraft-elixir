@@ -11,7 +11,7 @@ defmodule HeroAttackTest do
   end
   test "it add +1 to attack modifier at even levels", context do
     Enum.each([{1000, +1}, {2000, +1}, {3000, +2}, {4000, +2}], fn({xp, modifier}) ->
-      {:ok, hero} = Hero.add_experience(context[:subject], xp)
+      {:ok, hero} = Hero.Experience.add(context[:subject], xp)
       assert Hero.Attack.modifier(hero) == modifier
     end)
   end
@@ -28,7 +28,7 @@ defmodule HeroAttackTest do
   test "when a fighter it add +1 to attack modifier at every level", context do
     Enum.each([{1000, +2}, {2000, +3}, {3000, +4}, {4000, +5}], fn({xp, modifier}) ->
       {:ok, hero} = Hero.class(context[:subject], :fighter)
-      {:ok, hero} = Hero.add_experience(hero, xp)
+      {:ok, hero} = Hero.Experience.add(hero, xp)
       assert Hero.Attack.modifier(hero) == modifier
     end)
   end

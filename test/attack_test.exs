@@ -56,17 +56,17 @@ defmodule AttackTest do
 
   test "it does not add experience on a miss", context do
     {:miss, attacker, _} = Attack.attack(context[:attacker], context[:defender], 5)
-    assert Hero.experience(attacker) == 0
+    assert Hero.Experience.points(attacker) == 0
   end
 
   test "it adds experience on a hit", context do
     {:hit, attacker, _} = Attack.attack(context[:attacker], context[:defender], 15)
-    assert Hero.experience(attacker) == 10
+    assert Hero.Experience.points(attacker) == 10
   end
 
   test "it adds experience on a critical", context do
     {:critical, attacker, _} = Attack.attack(context[:attacker], context[:defender], 20)
-    assert Hero.experience(attacker) == 10
+    assert Hero.Experience.points(attacker) == 10
   end
 
 end
