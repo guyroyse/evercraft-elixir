@@ -48,9 +48,20 @@ defmodule HeroTest do
     {:ok, hero} = Hero.class(context[:subject], :fighter)
     assert Hero.class(hero) == :fighter
   end
+  test "it can be a rogue", context do
+    {:ok, hero} = Hero.class(context[:subject], :rogue)
+    assert Hero.class(hero) == :rogue
+  end
+
+  ## class - invalid classes
   test "it cannot be an invalid class", context do
     {:error, reason} = Hero.class(context[:subject], :poser)
     assert reason == "invalid class"
+  end
+  test "it cannot be a rogue if it is good", context do
+    {:ok, hero} = Hero.alignment(context[:subject], :good)
+    {:error, reason} = Hero.class(hero, :rogue)
+    assert reason == "rogues cannot be good"
   end
 
   ## alignment
@@ -70,9 +81,16 @@ defmodule HeroTest do
     {:ok, hero} = Hero.alignment(context[:subject], :evil)
     assert Hero.alignment(hero) == :evil
   end
+
+  ## alignment - invalid alignments
   test "it cannot be an invalid alignment", context do
     {:error, reason} = Hero.alignment(context[:subject], :emo)
     assert reason == "invalid alignment"
+  end
+  test "it cannot be good if it is a rogue", context do
+    {:ok, hero} = Hero.class(context[:subject], :rogue)
+    {:error, reason} = Hero.alignment(hero, :good)
+    assert reason == "rogues cannot be good"
   end
 
   ## armor class

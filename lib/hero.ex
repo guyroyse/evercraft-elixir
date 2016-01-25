@@ -34,9 +34,10 @@ defmodule Hero do
   end
 
   def class(hero, value) do
-    cond do
-      valid_class? value -> {:ok, %{hero | class: value}}
-      true -> {:error, "invalid class"}
+    case { valid_class?(value), valid_class_alignment_combo?(value, Hero.alignment(hero)) } do
+      {true, true} -> {:ok, %{hero | class: value}}
+      {true, false} -> {:error, "rogues cannot be good"}
+      {_, _} -> {:error, "invalid class"}
     end
   end
 
@@ -45,9 +46,10 @@ defmodule Hero do
   end
 
   def alignment(hero, value) do
-    cond do
-      valid_alignment? value -> {:ok, %{hero | alignment: value}}
-      true -> {:error, "invalid alignment"}
+    case { valid_alignment?(value), valid_class_alignment_combo?(Hero.class(hero), value) } do
+      {true, true} -> {:ok, %{hero | alignment: value}}
+      {true, false} -> {:error, "rogues cannot be good"}
+      {_, _} -> {:error, "invalid alignment"}
     end
   end
 
@@ -60,11 +62,22 @@ defmodule Hero do
   end
 
   defp valid_alignment?(value) do
-    [:good, :neutral, :evil] |> Enum.filter(&(&1 == value)) |> Enum.empty? == false
+    value_in_list([:good, :neutral, :evil], value)
   end
 
   defp valid_class?(value) do
-    [:no_class, :fighter] |> Enum.filter(&(&1 == value)) |> Enum.empty? == false
+    value_in_list([:no_class, :fighter, :rogue], value)
+  end
+
+  defp valid_class_alignment_combo?(class, alignment) do
+    case {class, alignment} do
+      {:rogue, :good} -> false
+      {_, _} -> true
+    end
+  end
+
+  defp value_in_list(list, value) do
+    list |> Enum.filter(&(&1 == value)) |> Enum.empty? == false
   end
 
 end
