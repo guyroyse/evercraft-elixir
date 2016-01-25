@@ -33,6 +33,13 @@ defmodule HeroAttackTest do
     end)
   end
 
+  ## attack modifier - when a rogue
+  test "when a rogue it adds dex modifier to attack modifier", context do
+    {:ok, hero} = Hero.class(context[:subject], :rogue)
+    {:ok, hero} = Hero.Ability.score(hero, :dex, 15)
+    assert Hero.Attack.modifier(hero) == +2
+  end
+
   ## attack damage
   test "it has default attack damage of 1", context do
     assert Hero.Attack.damage(context[:subject]) == 1
@@ -57,6 +64,12 @@ defmodule HeroAttackTest do
   test "it cannot do less than 1 point of damage on a crit regardless of str modifier", context do
     {:ok, hero} = Hero.Ability.score(context[:subject], :str, 6)
     assert Hero.Attack.critical_damage(hero) == 1
+  end
+
+  ## critical damage - when a rogue
+  test "when a rogue it has default critical damage of 3", context do
+    {:ok, hero} = Hero.class(context[:subject], :rogue)
+    assert Hero.Attack.critical_damage(hero) == 3
   end
 
 end
