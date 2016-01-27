@@ -1,51 +1,64 @@
 defmodule Attack do
+
   def attack(attacker, defender, roll) do
-    result = attack_result(attacker, defender, roll)
-    defender = damage(attacker, defender, result)
-    attacker = add_experience(attacker, result)
+    result = Attack.Resolve.resolve(attacker, defender, roll)
+    attacker = Attack.Experience.add(attacker, result)
+    defender = Attack.Damage.damage(attacker, defender, result)
     {result, attacker, defender}
   end
 
-  defp attack_result(attacker, defender, roll) do
-    case {armor_class(defender), adjusted_roll(roll, attacker), roll} do
+end
+
+defmodule Attack.Resolve do
+
+  def resolve(attacker, defender, roll) do
+    ac = armor_class(attacker, defender)
+    adjusted = adjusted_roll(roll, attacker)
+    case {ac, adjusted, roll} do
       {_, _, 20} -> :critical
-      {ac, roll, _} when roll >= ac -> :hit
+      {ac, adjusted, _} when adjusted >= ac -> :hit
       {_, _, _} -> :miss
     end
   end
 
-  defp damage(_, defender, attack_result) when attack_result == :miss do
-    defender
-  end
-
-  defp damage(attacker, defender, attack_result) do
-    {:ok, defender} = Hero.HitPoints.damage(defender, calculate_damage(attacker, attack_result))
-    defender
-  end
-
-  defp calculate_damage(attacker, attack_result) when attack_result == :hit do
-    Hero.Attack.damage(attacker)
-  end
-
-  defp calculate_damage(attacker, attack_result) when attack_result == :critical do
-    Hero.Attack.critical_damage(attacker)
-  end
-
-  defp armor_class(defender) do
-    Hero.armor_class(defender)
+  defp armor_class(attacker, defender) do
+    attacker_class = Hero.class(attacker)
+    defender_dex = Hero.Ability.modifier(defender, :dex)
+    case {attacker_class, defender_dex} do
+      {:rogue, modifier} when modifier > 0 -> Hero.armor_class(defender) - modifier
+      {_, _} -> Hero.armor_class(defender)
+    end
   end
 
   defp adjusted_roll(roll, attacker) do
     roll + Hero.Attack.modifier(attacker)
   end
 
-  defp add_experience(attacker, attack_result) when attack_result == :miss do
+end
+
+defmodule Attack.Damage do
+
+  def damage(attacker, defender, result) do
+    damage = calculate_damage(attacker, result)
+    {:ok, defender} = Hero.HitPoints.damage(defender, damage)
+    defender
+  end
+
+  defp calculate_damage(_, :miss) do 0 end
+  defp calculate_damage(attacker, :hit) do Hero.Attack.damage(attacker) end
+  defp calculate_damage(attacker, :critical) do Hero.Attack.critical_damage(attacker) end
+
+end
+
+defmodule Attack.Experience do
+
+  def add(attacker, result) do
+    xp = calculate_experience(result)
+    {:ok, attacker} = Hero.Experience.add(attacker, xp)
     attacker
   end
 
-  defp add_experience(attacker, attack_result) do
-    {:ok, attacker} = Hero.Experience.add(attacker, 10)
-    attacker
-  end
+  defp calculate_experience(:miss) do 0 end
+  defp calculate_experience(_) do 10 end
 
 end
