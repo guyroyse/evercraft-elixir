@@ -21,15 +21,19 @@ defmodule Hero do
     {:ok, %{hero | name: value}}
   end
 
+  def armor_class(hero) do
+    10 + Hero.Ability.modifier(hero, :dex)
+  end
+
   def class(hero) do
     hero.class
   end
 
   def class(hero, value) do
-    case { valid_class?(value), valid_class_alignment_combo?(value, Hero.alignment(hero)) } do
-      {true, true} -> {:ok, %{hero | class: value}}
-      {true, false} -> {:error, "invalid class and alignment"}
-      {_, _} -> {:error, "invalid class"}
+    case valid_class_alignment_and_combo?(value, Hero.alignment(hero)) do
+      {true, true, true} -> {:ok, %{hero | class: value}}
+      {true, true, false} -> {:error, "invalid class and alignment"}
+      {_, _, _} -> {:error, "invalid class"}
     end
   end
 
@@ -38,15 +42,19 @@ defmodule Hero do
   end
 
   def alignment(hero, value) do
-    case { valid_alignment?(value), valid_class_alignment_combo?(Hero.class(hero), value) } do
-      {true, true} -> {:ok, %{hero | alignment: value}}
-      {true, false} -> {:error, "invalid class and alignment"}
-      {_, _} -> {:error, "invalid alignment"}
+    case valid_class_alignment_and_combo?(Hero.class(hero), value) do
+      {true, true, true} -> {:ok, %{hero | alignment: value}}
+      {true, true, false} -> {:error, "invalid class and alignment"}
+      {_, _, _} -> {:error, "invalid alignment"}
     end
   end
 
-  def armor_class(hero) do
-    10 + Hero.Ability.modifier(hero, :dex)
+  defp valid_class_alignment_and_combo?(class, alignment) do
+    {
+      valid_class?(class),
+      valid_alignment?(alignment),
+      valid_class_alignment_combo?(class, alignment)
+    }
   end
 
   defp valid_alignment?(value) do
