@@ -35,6 +35,7 @@ defmodule Hero.Attack.Modifier do
   defp attack_base_modifier_per_level(hero) do
     case Hero.class(hero) do
       :fighter ->  1
+      :paladin -> 1
       :monk -> 2 / 3
       _ -> 1 / 2
     end

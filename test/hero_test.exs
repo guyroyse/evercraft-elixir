@@ -35,6 +35,11 @@ defmodule HeroTest do
     {:ok, hero} = Hero.class(context[:subject], :monk)
     assert Hero.class(hero) == :monk
   end
+  test "it can be a paladin", context do
+    {:ok, hero} = Hero.alignment(context[:subject], :good)
+    {:ok, hero} = Hero.class(hero, :paladin)
+    assert Hero.class(hero) == :paladin
+  end
 
   ## class - invalid classes
   test "it cannot be an invalid class", context do
@@ -44,6 +49,16 @@ defmodule HeroTest do
   test "it cannot be a rogue if it is good", context do
     {:ok, hero} = Hero.alignment(context[:subject], :good)
     {:error, reason} = Hero.class(hero, :rogue)
+    assert reason == "invalid class and alignment"
+  end
+  test "it cannot be a paladin if it is neutral", context do
+    {:ok, hero} = Hero.alignment(context[:subject], :neutral)
+    {:error, reason} = Hero.class(hero, :paladin)
+    assert reason == "invalid class and alignment"
+  end
+  test "it cannot be a paladin if it is evil", context do
+    {:ok, hero} = Hero.alignment(context[:subject], :evil)
+    {:error, reason} = Hero.class(hero, :paladin)
     assert reason == "invalid class and alignment"
   end
 
@@ -73,6 +88,16 @@ defmodule HeroTest do
   test "it cannot be good if it is a rogue", context do
     {:ok, hero} = Hero.class(context[:subject], :rogue)
     {:error, reason} = Hero.alignment(hero, :good)
+    assert reason == "invalid class and alignment"
+  end
+  test "it cannot be neutral if it is a paladin", context do
+    {:ok, hero} = Hero.alignment(context[:subject], :neutral)
+    {:error, reason} = Hero.class(hero, :paladin)
+    assert reason == "invalid class and alignment"
+  end
+  test "it cannot be evil if it is a paladin", context do
+    {:ok, hero} = Hero.alignment(context[:subject], :evil)
+    {:error, reason} = Hero.class(hero, :paladin)
     assert reason == "invalid class and alignment"
   end
 

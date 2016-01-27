@@ -64,12 +64,14 @@ defmodule Hero do
   end
 
   defp valid_class?(value) do
-    value_in_list([:no_class, :fighter, :rogue, :monk], value)
+    value_in_list([:no_class, :fighter, :rogue, :monk, :paladin], value)
   end
 
   defp valid_class_alignment_combo?(class, alignment) do
     case {class, alignment} do
       {:rogue, :good} -> false
+      {:paladin, :evil} -> false
+      {:paladin, :neutral} -> false
       {_, _} -> true
     end
   end

@@ -23,6 +23,7 @@ defmodule Hero.HitPoints do
   defp for_class(hero) do
     case Hero.class(hero) do
       :fighter -> 10
+      :paladin -> 8
       :monk -> 6
       _ -> 5
     end

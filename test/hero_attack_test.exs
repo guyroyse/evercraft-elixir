@@ -61,6 +61,21 @@ defmodule HeroAttackTest do
     end)
   end
 
+  ## attack modifier - when a paladin
+  test "when a paladin it has default attack modifier of +1", context do
+    {:ok, hero} = Hero.alignment(context[:subject], :good)
+    {:ok, hero} = Hero.class(hero, :paladin)
+    assert Hero.Attack.modifier(hero) == +1
+  end
+  test "when a paladin it add +1 to attack modifier at every level", context do
+    Enum.each([{1000, +2}, {2000, +3}, {3000, +4}, {4000, +5}], fn({xp, modifier}) ->
+      {:ok, hero} = Hero.alignment(context[:subject], :good)
+      {:ok, hero} = Hero.class(hero, :paladin)
+      {:ok, hero} = Hero.Experience.add(hero, xp)
+      assert Hero.Attack.modifier(hero) == modifier
+    end)
+  end
+
   ## attack damage
   test "it has default attack damage of 1", context do
     assert Hero.Attack.damage(context[:subject]) == 1

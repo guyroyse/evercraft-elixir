@@ -54,6 +54,19 @@ defmodule HeroHitPointsTest do
     assert Hero.HitPoints.current(hero) == 18
   end
 
+  ## max hit points - when a paladin
+  test "when a paladin it has default max hit points of 8", context do
+    {:ok, hero} = Hero.alignment(context[:subject], :good)
+    {:ok, hero} = Hero.class(hero, :paladin)
+    assert Hero.HitPoints.current(hero) == 8
+  end
+  test "when a paladin it has 8 max hit points per level", context do
+    {:ok, hero} = Hero.alignment(context[:subject], :good)
+    {:ok, hero} = Hero.class(hero, :paladin)
+    {:ok, hero} = Hero.Experience.add(hero, 2000) ## level = 3
+    assert Hero.HitPoints.current(hero) == 24
+  end
+
   ## hit points
   test "it has max hit points as hit point when undamaged", context do
     assert Hero.HitPoints.current(context[:subject]) == 5
