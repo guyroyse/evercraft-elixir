@@ -30,11 +30,7 @@ defmodule Hero do
   end
 
   def class(hero, value) do
-    case valid_class_alignment_and_combo?(value, Hero.alignment(hero)) do
-      {true, true, true} -> {:ok, %{hero | class: value}}
-      {true, true, false} -> {:error, "invalid class and alignment"}
-      {_, _, _} -> {:error, "invalid class"}
-    end
+    class_and_alignment(hero, value, Hero.alignment(hero))
   end
 
   def alignment(hero) do
@@ -42,10 +38,15 @@ defmodule Hero do
   end
 
   def alignment(hero, value) do
-    case valid_class_alignment_and_combo?(Hero.class(hero), value) do
-      {true, true, true} -> {:ok, %{hero | alignment: value}}
+    class_and_alignment(hero, Hero.class(hero), value)
+  end
+
+  defp class_and_alignment(hero, class, alignment) do
+    case valid_class_alignment_and_combo?(class, alignment) do
+      {true, true, true} -> {:ok, %{hero | class: class, alignment: alignment}}
       {true, true, false} -> {:error, "invalid class and alignment"}
-      {_, _, _} -> {:error, "invalid alignment"}
+      {true, false, _} -> {:error, "invalid alignment"}
+      {false, true, _} -> {:error, "invalid class"}
     end
   end
 
