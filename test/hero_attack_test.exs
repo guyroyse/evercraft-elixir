@@ -40,6 +40,27 @@ defmodule HeroAttackTest do
     assert Hero.Attack.modifier(hero) == +2
   end
 
+  ## attack modifier - when a monk
+  test "when a monk it adds wis modifier to attack modifier in addition to strength", context do
+    {:ok, hero} = Hero.class(context[:subject], :monk)
+    {:ok, hero} = Hero.Ability.score(hero, :str, 15)
+    {:ok, hero} = Hero.Ability.score(hero, :wis, 15)
+    assert Hero.Attack.modifier(hero) == +4
+  end
+  test "when a monk it does not add negative wis modifier to attack modifier in addition to strength", context do
+    {:ok, hero} = Hero.class(context[:subject], :monk)
+    {:ok, hero} = Hero.Ability.score(hero, :str, 15)
+    {:ok, hero} = Hero.Ability.score(hero, :wis, 4)
+    assert Hero.Attack.modifier(hero) == +2
+  end
+  test "when a monk it add +1 to attack modifier at every 2nd and 3rd level", context do
+    Enum.each([{0, +0}, {1000, +1}, {2000, +2}, {3000, +2}, {4000, +3}, {5000, +4}], fn({xp, modifier}) ->
+      {:ok, hero} = Hero.class(context[:subject], :monk)
+      {:ok, hero} = Hero.Experience.add(hero, xp)
+      assert Hero.Attack.modifier(hero) == modifier
+    end)
+  end
+
   ## attack damage
   test "it has default attack damage of 1", context do
     assert Hero.Attack.damage(context[:subject]) == 1
@@ -51,6 +72,12 @@ defmodule HeroAttackTest do
   test "it cannot do less than 1 point of damage regardless of str modifier", context do
     {:ok, hero} = Hero.Ability.score(context[:subject], :str, 6)
     assert Hero.Attack.damage(hero) == 1
+  end
+
+  ## attack damage - when a monk
+  test "it has default attack damage of 3 when a monk", context do
+    {:ok, hero} = Hero.class(context[:subject], :monk)
+    assert Hero.Attack.damage(hero) == 3
   end
 
   ## critical damage

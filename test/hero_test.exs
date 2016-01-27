@@ -31,6 +31,10 @@ defmodule HeroTest do
     {:ok, hero} = Hero.class(context[:subject], :rogue)
     assert Hero.class(hero) == :rogue
   end
+  test "it can be a monk", context do
+    {:ok, hero} = Hero.class(context[:subject], :monk)
+    assert Hero.class(hero) == :monk
+  end
 
   ## class - invalid classes
   test "it cannot be an invalid class", context do

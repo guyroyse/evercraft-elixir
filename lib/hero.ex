@@ -8,6 +8,7 @@ defmodule Hero do
       str: Ability.create(),
       dex: Ability.create(),
       con: Ability.create(),
+      wis: Ability.create(),
       experience: 0,
       class: :no_class
     }
@@ -44,9 +45,9 @@ defmodule Hero do
   defp class_and_alignment(hero, class, alignment) do
     case valid_class_alignment_and_combo?(class, alignment) do
       {true, true, true} -> {:ok, %{hero | class: class, alignment: alignment}}
-      {true, true, false} -> {:error, "invalid class and alignment"}
-      {true, false, _} -> {:error, "invalid alignment"}
       {false, true, _} -> {:error, "invalid class"}
+      {true, false, _} -> {:error, "invalid alignment"}
+      {_, _, _} -> {:error, "invalid class and alignment"}
     end
   end
 
@@ -63,7 +64,7 @@ defmodule Hero do
   end
 
   defp valid_class?(value) do
-    value_in_list([:no_class, :fighter, :rogue], value)
+    value_in_list([:no_class, :fighter, :rogue, :monk], value)
   end
 
   defp valid_class_alignment_combo?(class, alignment) do

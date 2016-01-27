@@ -19,6 +19,7 @@ defmodule Hero.Attack do
   defp base_modifier_per_level(hero) do
     case Hero.class(hero) do
       :fighter ->  1
+      :monk -> 2 / 3
       _ -> 1 / 2
     end
   end
@@ -26,12 +27,16 @@ defmodule Hero.Attack do
   defp ability_modifier(hero) do
     case Hero.class(hero) do
       :rogue -> Hero.Ability.modifier(hero, :dex)
+      :monk -> Hero.Ability.modifier(hero, :str) + max(0, Hero.Ability.modifier(hero, :wis))
       _ -> Hero.Ability.modifier(hero, :str)
     end
   end
 
   defp base_damage(hero) do
-    1 + Hero.Ability.modifier(hero, :str)
+    case Hero.class(hero) do
+      :monk -> 3 + Hero.Ability.modifier(hero, :str)
+      _ -> 1 + Hero.Ability.modifier(hero, :str)
+    end
   end
 
   defp critical_mulitplier(hero) do
