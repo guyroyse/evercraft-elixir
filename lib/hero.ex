@@ -22,10 +22,6 @@ defmodule Hero do
     {:ok, %{hero | name: value}}
   end
 
-  def armor_class(hero) do
-    10 + Hero.Ability.modifier(hero, :dex)
-  end
-
   def class(hero) do
     hero.class
   end

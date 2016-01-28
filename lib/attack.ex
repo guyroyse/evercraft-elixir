@@ -25,8 +25,8 @@ defmodule Attack.Resolve do
     attacker_class = Hero.class(attacker)
     defender_dex = Hero.Ability.modifier(defender, :dex)
     case {attacker_class, defender_dex} do
-      {:rogue, modifier} when modifier > 0 -> Hero.armor_class(defender) - modifier
-      {_, _} -> Hero.armor_class(defender)
+      {:rogue, modifier} when modifier > 0 -> Hero.ArmorClass.armor_class(defender) - modifier
+      {_, _} -> Hero.ArmorClass.armor_class(defender)
     end
   end
 
