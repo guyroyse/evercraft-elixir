@@ -13,7 +13,7 @@ defmodule Attack.Resolve do
 
   def resolve(attacker, defender, roll) do
     ac = Hero.ArmorClass.armor_class(defender, attacker)
-    adjusted = roll + Hero.Attack.modifier(attacker)
+    adjusted = roll + Hero.Attack.modifier(attacker, defender)
     case {ac, adjusted, roll} do
       {_, _, 20} -> :critical
       {ac, adjusted, _} when adjusted >= ac -> :hit
@@ -26,14 +26,14 @@ end
 defmodule Attack.Damage do
 
   def damage(attacker, defender, result) do
-    damage = calculate_damage(attacker, result)
+    damage = calculate_damage(attacker, defender, result)
     {:ok, defender} = Hero.HitPoints.damage(defender, damage)
     defender
   end
 
-  defp calculate_damage(_, :miss) do 0 end
-  defp calculate_damage(attacker, :hit) do Hero.Attack.damage(attacker) end
-  defp calculate_damage(attacker, :critical) do Hero.Attack.critical_damage(attacker) end
+  defp calculate_damage(_, _, :miss) do 0 end
+  defp calculate_damage(attacker, defender, :hit) do Hero.Attack.damage(attacker, defender) end
+  defp calculate_damage(attacker, defender, :critical) do Hero.Attack.critical_damage(attacker, defender) end
 
 end
 

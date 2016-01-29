@@ -31,12 +31,12 @@ defmodule AttackTest do
   test "it applies attack damage to opponent on a hit", context do
     {:ok, attacker} = Hero.Ability.score(context[:attacker], :str, 12)  ## attack damage = 2
     {:hit, attacker, defender} = Attack.attack(attacker, context[:defender], 15)
-    assert Hero.HitPoints.current(defender) == 5 - Hero.Attack.damage(attacker)
+    assert Hero.HitPoints.current(defender) == 5 - Hero.Attack.damage(attacker, defender)
   end
   test "it applies critical damage to opponent on a critical", context do
     {:ok, attacker} = Hero.Ability.score(context[:attacker], :str, 12)  ## crit damage = 4
     {:critical, attacker, defender} = Attack.attack(attacker, context[:defender], 20)
-    assert Hero.HitPoints.current(defender) == 5 - Hero.Attack.critical_damage(attacker)
+    assert Hero.HitPoints.current(defender) == 5 - Hero.Attack.critical_damage(attacker, defender)
   end
 
   ## attack modifer
