@@ -52,18 +52,6 @@ defmodule AttackTest do
     {result, _, _} = Attack.attack(context[:attacker], defender, 10)
     assert result == :miss
   end
-  test "it ignores opponent's positive dex modifier to armor class if attacker is a rogue", context do
-    {:ok, attacker} = Hero.class(context[:attacker], :rogue)
-    {:ok, defender} = Hero.Ability.score(context[:defender], :dex, 20)  ## armor class = 15
-    {result, _, _} = Attack.attack(attacker, defender, 10)
-    assert result == :hit
-  end
-  test "it does not ignore opponent's negative dex modifier to armor class if attacker is a rogue", context do
-    {:ok, attacker} = Hero.class(context[:attacker], :rogue)
-    {:ok, defender} = Hero.Ability.score(context[:defender], :dex, 5)  ## armor class = 7
-    {result, _, _} = Attack.attack(attacker, defender, 7)
-    assert result == :hit
-  end
 
   ## experience
   test "it does not add experience on a miss", context do

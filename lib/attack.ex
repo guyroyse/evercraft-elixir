@@ -12,26 +12,13 @@ end
 defmodule Attack.Resolve do
 
   def resolve(attacker, defender, roll) do
-    ac = armor_class(attacker, defender)
-    adjusted = adjusted_roll(roll, attacker)
+    ac = Hero.ArmorClass.armor_class(defender, attacker)
+    adjusted = roll + Hero.Attack.modifier(attacker)
     case {ac, adjusted, roll} do
       {_, _, 20} -> :critical
       {ac, adjusted, _} when adjusted >= ac -> :hit
       {_, _, _} -> :miss
     end
-  end
-
-  defp armor_class(attacker, defender) do
-    attacker_class = Hero.class(attacker)
-    defender_dex = Hero.Ability.modifier(defender, :dex)
-    case {attacker_class, defender_dex} do
-      {:rogue, modifier} when modifier > 0 -> Hero.ArmorClass.armor_class(defender) - modifier
-      {_, _} -> Hero.ArmorClass.armor_class(defender)
-    end
-  end
-
-  defp adjusted_roll(roll, attacker) do
-    roll + Hero.Attack.modifier(attacker)
   end
 
 end
