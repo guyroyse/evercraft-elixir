@@ -8,7 +8,9 @@ defmodule Hero do
       str: Ability.create(),
       dex: Ability.create(),
       con: Ability.create(),
+      int: Ability.create(),
       wis: Ability.create(),
+      cha: Ability.create(),
       experience: 0,
       class: :no_class,
       race: :human

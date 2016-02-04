@@ -13,7 +13,13 @@ defmodule Hero.Ability do
   end
 
   def modifier(hero, ability) do
-    Ability.modifier(hero[ability])
+    case {Hero.race(hero), ability, Ability.modifier(hero[ability])} do
+      {:orc, :str, mod} -> mod + 2
+      {:orc, :int, mod} -> mod - 1
+      {:orc, :wis, mod} -> mod - 1
+      {:orc, :cha, mod} -> mod - 1
+      {_, _, mod} -> mod
+    end
   end
 
 end
