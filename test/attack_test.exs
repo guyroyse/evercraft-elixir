@@ -47,7 +47,7 @@ defmodule AttackTest do
   end
 
   ## armor class
-  test "it considers opponent armor class when determing a hit", context do
+  test "it considers opponent's armor class when determing a hit", context do
     {:ok, defender} = Hero.Ability.score(context[:defender], :dex, 20)  ## armor class = 15
     {result, _, _} = Attack.attack(context[:attacker], defender, 10)
     assert result == :miss

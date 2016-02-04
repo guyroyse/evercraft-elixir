@@ -21,11 +21,11 @@ defmodule HeroAttackTest do
   end
 
   ## attack modifier - when a fighter
-  test "when a fighter it has default attack modifier of +1", context do
+  test "when a fighter, it has default attack modifier of +1", context do
     {:ok, hero} = Hero.class(context[:subject], :fighter)
     assert Hero.Attack.modifier(hero, context[:defender]) == +1
   end
-  test "when a fighter it add +1 to attack modifier at every level", context do
+  test "when a fighter, it add +1 to attack modifier at every level", context do
     Enum.each([{1000, +2}, {2000, +3}, {3000, +4}, {4000, +5}], fn({xp, modifier}) ->
       {:ok, hero} = Hero.class(context[:subject], :fighter)
       {:ok, hero} = Hero.Experience.add(hero, xp)
@@ -34,26 +34,26 @@ defmodule HeroAttackTest do
   end
 
   ## attack modifier - when a rogue
-  test "when a rogue it adds dex modifier to attack modifier", context do
+  test "when a rogue, it adds dex modifier to attack modifier", context do
     {:ok, hero} = Hero.class(context[:subject], :rogue)
     {:ok, hero} = Hero.Ability.score(hero, :dex, 15)
     assert Hero.Attack.modifier(hero, context[:defender]) == +2
   end
 
   ## attack modifier - when a monk
-  test "when a monk it adds wis modifier to attack modifier in addition to strength", context do
+  test "when a monk, it adds wis modifier to attack modifier in addition to strength", context do
     {:ok, hero} = Hero.class(context[:subject], :monk)
     {:ok, hero} = Hero.Ability.score(hero, :str, 15)
     {:ok, hero} = Hero.Ability.score(hero, :wis, 15)
     assert Hero.Attack.modifier(hero, context[:defender]) == +4
   end
-  test "when a monk it does not add negative wis modifier to attack modifier in addition to strength", context do
+  test "when a monk, it does not add negative wis modifier to attack modifier in addition to strength", context do
     {:ok, hero} = Hero.class(context[:subject], :monk)
     {:ok, hero} = Hero.Ability.score(hero, :str, 15)
     {:ok, hero} = Hero.Ability.score(hero, :wis, 4)
     assert Hero.Attack.modifier(hero, context[:defender]) == +2
   end
-  test "when a monk it add +1 to attack modifier at every 2nd and 3rd level", context do
+  test "when a monk it, add +1 to attack modifier at every 2nd and 3rd level", context do
     Enum.each([{0, +0}, {1000, +1}, {2000, +2}, {3000, +2}, {4000, +3}, {5000, +4}], fn({xp, modifier}) ->
       {:ok, hero} = Hero.class(context[:subject], :monk)
       {:ok, hero} = Hero.Experience.add(hero, xp)
@@ -62,12 +62,12 @@ defmodule HeroAttackTest do
   end
 
   ## attack modifier - when a paladin
-  test "when a paladin it has default attack modifier of +1", context do
+  test "when a paladin, it has default attack modifier of +1", context do
     {:ok, hero} = Hero.alignment(context[:subject], :good)
     {:ok, hero} = Hero.class(hero, :paladin)
     assert Hero.Attack.modifier(hero, context[:defender]) == +1
   end
-  test "when a paladin it add +1 to attack modifier at every level", context do
+  test "when a paladin, it add +1 to attack modifier at every level", context do
     Enum.each([{1000, +2}, {2000, +3}, {3000, +4}, {4000, +5}], fn({xp, modifier}) ->
       {:ok, hero} = Hero.alignment(context[:subject], :good)
       {:ok, hero} = Hero.class(hero, :paladin)
@@ -77,7 +77,7 @@ defmodule HeroAttackTest do
   end
 
   ## attack modifier - when a paladin against an evil defender
-  test "when a paladin attacking an evil character it adds +2 to attack modifuer", context do
+  test "when a paladin attacking an evil character, it adds +2 to attack modifier", context do
     {:ok, hero} = Hero.alignment(context[:subject], :good)
     {:ok, hero} = Hero.class(hero, :paladin)
     {:ok, defender} = Hero.alignment(context[:defender], :evil)
@@ -98,13 +98,13 @@ defmodule HeroAttackTest do
   end
 
   ## attack damage - when a monk
-  test "it has default attack damage of 3 when a monk", context do
+  test "when a monk, it has default attack damage of 3", context do
     {:ok, hero} = Hero.class(context[:subject], :monk)
     assert Hero.Attack.damage(hero, context[:defender]) == 3
   end
 
   ## attack damage - when a paladin against an evil defender
-  test "when a paladin attacking an evil character it have an attack damage of 3", context do
+  test "when a paladin attacking an evil character, it has an attack damage of 3", context do
     {:ok, hero} = Hero.alignment(context[:subject], :good)
     {:ok, hero} = Hero.class(hero, :paladin)
     {:ok, defender} = Hero.alignment(context[:defender], :evil)
@@ -112,7 +112,7 @@ defmodule HeroAttackTest do
   end
 
   ## attack damage - when a paladin against a non-evil defender
-  test "when a paladin attacking a non-evil character it have an attack damage of 1", context do
+  test "when a paladin attacking a non-evil character, it has an attack damage of 1", context do
     {:ok, hero} = Hero.alignment(context[:subject], :good)
     {:ok, hero} = Hero.class(hero, :paladin)
     assert Hero.Attack.damage(hero, context[:defender]) == 1
@@ -132,13 +132,13 @@ defmodule HeroAttackTest do
   end
 
   ## critical damage - when a rogue
-  test "when a rogue it has default critical damage of 3", context do
+  test "when a rogue, it has default critical damage of 3", context do
     {:ok, hero} = Hero.class(context[:subject], :rogue)
     assert Hero.Attack.critical_damage(hero, context[:defender]) == 3
   end
 
   ## critical damage - when a paladin against an evil defender
-  test "when a paladin attacking an evil character it has a critical damage of 9", context do
+  test "when a paladin attacking an evil character, it has a critical damage of 9", context do
     {:ok, hero} = Hero.alignment(context[:subject], :good)
     {:ok, hero} = Hero.class(hero, :paladin)
     {:ok, defender} = Hero.alignment(context[:defender], :evil)
@@ -146,7 +146,7 @@ defmodule HeroAttackTest do
   end
 
   ## critical damage - when a paladin against an non-evil defender
-  test "when a paladin attacking a non-evil character it has a critical damage of 2", context do
+  test "when a paladin attacking a non-evil character, it has a critical damage of 2", context do
     {:ok, hero} = Hero.alignment(context[:subject], :good)
     {:ok, hero} = Hero.class(hero, :paladin)
     assert Hero.Attack.critical_damage(hero, context[:defender]) == 2

@@ -14,13 +14,13 @@ defmodule HeroArmorClassTest do
     assert Hero.ArmorClass.armor_class(hero, context[:attacker]) == 12
   end
 
-  ## armor class - with attacker that is a rogue
-  test "it ignores opponent's positive dex modifier to armor class if attacker is a rogue", context do
+  ## armor class - when attacker is a rogue
+  test "when attacker is a rogue, it ignores opponent's positive dex modifier to armor class", context do
     {:ok, attacker} = Hero.class(context[:attacker], :rogue)
     {:ok, hero} = Hero.Ability.score(context[:subject], :dex, 20)  ## armor class = 15
     assert Hero.ArmorClass.armor_class(hero, attacker) == 10
   end
-  test "it does not ignore opponent's negative dex modifier to armor class if attacker is a rogue", context do
+  test "when attacker is a rogue, it does not ignore opponent's negative dex modifier to armor class", context do
     {:ok, attacker} = Hero.class(context[:attacker], :rogue)
     {:ok, hero} = Hero.Ability.score(context[:subject], :dex, 5)  ## armor class = 7
     assert Hero.ArmorClass.armor_class(hero, attacker) == 7
