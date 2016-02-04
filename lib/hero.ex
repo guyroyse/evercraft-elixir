@@ -10,7 +10,8 @@ defmodule Hero do
       con: Ability.create(),
       wis: Ability.create(),
       experience: 0,
-      class: :no_class
+      class: :no_class,
+      race: :human
     }
   end
 
@@ -27,7 +28,15 @@ defmodule Hero do
   end
 
   def class(hero, value) do
-    class_and_alignment(hero, value, Hero.alignment(hero))
+    class_race_and_alignment(hero, value, Hero.race(hero), Hero.alignment(hero))
+  end
+
+  def race(hero) do
+    hero.race
+  end
+
+  def race(hero, value) do
+    class_race_and_alignment(hero, Hero.class(hero), value, Hero.alignment(hero))
   end
 
   def alignment(hero) do
@@ -35,23 +44,25 @@ defmodule Hero do
   end
 
   def alignment(hero, value) do
-    class_and_alignment(hero, Hero.class(hero), value)
+    class_race_and_alignment(hero, Hero.class(hero), Hero.race(hero), value)
   end
 
-  defp class_and_alignment(hero, class, alignment) do
-    case valid_class_alignment_and_combo?(class, alignment) do
-      {true, true, true} -> {:ok, %{hero | class: class, alignment: alignment}}
-      {false, true, _} -> {:error, "invalid class"}
-      {true, false, _} -> {:error, "invalid alignment"}
-      {_, _, _} -> {:error, "invalid class and alignment"}
+  defp class_race_and_alignment(hero, class, race, alignment) do
+    case valid_class_race_alignment_and_combo?(class, race, alignment) do
+      {true, true, true, true} -> {:ok, %{hero | class: class, race: race, alignment: alignment}}
+      {false, true, true, _} -> {:error, "invalid class"}
+      {true, false, true, _} -> {:error, "invalid race"}
+      {true, true, false, _} -> {:error, "invalid alignment"}
+      {_, _, _, _} -> {:error, "invalid class, race, and alignment combo"}
     end
   end
 
-  defp valid_class_alignment_and_combo?(class, alignment) do
+  defp valid_class_race_alignment_and_combo?(class, race, alignment) do
     {
       valid_class?(class),
+      valid_race?(race),
       valid_alignment?(alignment),
-      valid_class_alignment_combo?(class, alignment)
+      valid_class_race_alignment_combo?(class, race, alignment)
     }
   end
 
@@ -63,12 +74,17 @@ defmodule Hero do
     value_in_list([:no_class, :fighter, :rogue, :monk, :paladin], value)
   end
 
-  defp valid_class_alignment_combo?(class, alignment) do
-    case {class, alignment} do
-      {:rogue, :good} -> false
-      {:paladin, :evil} -> false
-      {:paladin, :neutral} -> false
-      {_, _} -> true
+  defp valid_race?(value) do
+    value_in_list([:human, :orc, :dwarf, :elf, :halfling], value)
+  end
+
+  defp valid_class_race_alignment_combo?(class, race, alignment) do
+    case {class, race, alignment} do
+      {:rogue, _, :good} -> false
+      {:paladin, _, :evil} -> false
+      {:paladin, _, :neutral} -> false
+      {_, :halfling, :evil} -> false
+      {_, _, _} -> true
     end
   end
 

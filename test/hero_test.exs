@@ -15,7 +15,7 @@ defmodule HeroTest do
   end
 
   ## class
-  test "it has a default class of :no_class", context do
+  test "it has a default class of no_class", context do
     assert Hero.class(context[:subject]) == :no_class
   end
   test "it can be classless", context do
@@ -49,17 +49,17 @@ defmodule HeroTest do
   test "it cannot be a rogue if it is good", context do
     {:ok, hero} = Hero.alignment(context[:subject], :good)
     {:error, reason} = Hero.class(hero, :rogue)
-    assert reason == "invalid class and alignment"
+    assert reason == "invalid class, race, and alignment combo"
   end
   test "it cannot be a paladin if it is neutral", context do
     {:ok, hero} = Hero.alignment(context[:subject], :neutral)
     {:error, reason} = Hero.class(hero, :paladin)
-    assert reason == "invalid class and alignment"
+    assert reason == "invalid class, race, and alignment combo"
   end
   test "it cannot be a paladin if it is evil", context do
     {:ok, hero} = Hero.alignment(context[:subject], :evil)
     {:error, reason} = Hero.class(hero, :paladin)
-    assert reason == "invalid class and alignment"
+    assert reason == "invalid class, race, and alignment combo"
   end
 
   ## alignment
@@ -88,17 +88,59 @@ defmodule HeroTest do
   test "it cannot be good if it is a rogue", context do
     {:ok, hero} = Hero.class(context[:subject], :rogue)
     {:error, reason} = Hero.alignment(hero, :good)
-    assert reason == "invalid class and alignment"
+    assert reason == "invalid class, race, and alignment combo"
   end
   test "it cannot be neutral if it is a paladin", context do
     {:ok, hero} = Hero.alignment(context[:subject], :neutral)
     {:error, reason} = Hero.class(hero, :paladin)
-    assert reason == "invalid class and alignment"
+    assert reason == "invalid class, race, and alignment combo"
   end
   test "it cannot be evil if it is a paladin", context do
     {:ok, hero} = Hero.alignment(context[:subject], :evil)
     {:error, reason} = Hero.class(hero, :paladin)
-    assert reason == "invalid class and alignment"
+    assert reason == "invalid class, race, and alignment combo"
+  end
+  test "it cannot be evil if it is a halfling", context do
+    {:ok, hero} = Hero.race(context[:subject], :halfling)
+    {:error, reason} = Hero.alignment(hero, :evil)
+    assert reason == "invalid class, race, and alignment combo"
+  end
+
+  ## race
+  test "it has default race of human", context do
+    assert Hero.race(context[:subject]) == :human
+  end
+  test "it can be human", context do
+    {:ok, hero} = Hero.race(context[:subject], :orc)
+    {:ok, hero} = Hero.race(hero, :human)
+    assert Hero.race(hero) == :human
+  end
+  test "it can be an orc", context do
+    {:ok, hero} = Hero.race(context[:subject], :orc)
+    assert Hero.race(hero) == :orc
+  end
+  test "it can be a dwarf", context do
+    {:ok, hero} = Hero.race(context[:subject], :dwarf)
+    assert Hero.race(hero) == :dwarf
+  end
+  test "it can be an elf", context do
+    {:ok, hero} = Hero.race(context[:subject], :elf)
+    assert Hero.race(hero) == :elf
+  end
+  test "it can be a halfling", context do
+    {:ok, hero} = Hero.race(context[:subject], :halfling)
+    assert Hero.race(hero) == :halfling
+  end
+
+  ## race - invalid races
+  test "it cannot have an invalid race", context do
+    {:error, reason} = Hero.race(context[:subject], :romulan)
+    assert reason == "invalid race"
+  end
+  test "it cannot be a halfling if it is evil", context do
+    {:ok, hero} = Hero.alignment(context[:subject], :evil)
+    {:error, reason} = Hero.race(hero, :halfling)
+    assert reason == "invalid class, race, and alignment combo"
   end
 
 end
