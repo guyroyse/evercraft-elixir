@@ -38,11 +38,11 @@ defmodule HeroArmorClassTest do
   end
 
   ## armor class - when an orc defending against a rogue
-  test "when an orc, it has a +2 bonus to armor class", context do
+  test "when an orc, defending against a rogue, it has a +2 bonus to armor class", context do
     {:ok, hero} = Hero.race(context[:subject], :orc)
     assert Hero.ArmorClass.armor_class(hero, context[:attacker]) == 12
   end
-  test "when an orc, defending against a rogue, it has a +2 bonus to armor class", context do
+  test "when an orc, defending against a rogue, it has a +2 bonus to armor class in additon to it's dex bonus", context do
     {:ok, attacker} = Hero.class(context[:attacker], :rogue)
     {:ok, hero} = Hero.race(context[:subject], :orc)
     {:ok, hero} = Hero.Ability.score(hero, :dex, 20)  ## armor class = 15
