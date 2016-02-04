@@ -78,18 +78,28 @@ defmodule Hero do
     value_in_list([:human, :orc, :dwarf, :elf, :halfling], value)
   end
 
+  defp value_in_list(list, value) do
+    list |> Enum.filter(&(&1 == value)) |> Enum.empty? == false
+  end
+
   defp valid_class_race_alignment_combo?(class, race, alignment) do
-    case {class, race, alignment} do
-      {:rogue, _, :good} -> false
-      {:paladin, _, :evil} -> false
-      {:paladin, _, :neutral} -> false
-      {_, :halfling, :evil} -> false
-      {_, _, _} -> true
+    valid_class_for_alignment(class, alignment) && valid_race_for_alignment(race, alignment)
+  end
+
+  defp valid_class_for_alignment(class, alignment) do
+    case {class, alignment} do
+      {:rogue, :good} -> false
+      {:paladin, :evil} -> false
+      {:paladin, :neutral} -> false
+      {_, _} -> true
     end
   end
 
-  defp value_in_list(list, value) do
-    list |> Enum.filter(&(&1 == value)) |> Enum.empty? == false
+  defp valid_race_for_alignment(race, alignment) do
+    case {race, alignment} do
+      {:halfling, :evil} -> false
+      {_, _} -> true
+    end
   end
 
 end
