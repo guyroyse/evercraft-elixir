@@ -30,7 +30,11 @@ defmodule Hero do
   end
 
   def class(hero, value) do
-    class_race_and_alignment(hero, value, Hero.race(hero), Hero.alignment(hero))
+    if valid_class?(value) do
+      class_race_and_alignment(hero, value, Hero.race(hero), Hero.alignment(hero))
+    else
+      {:error, "invalid class"}
+    end
   end
 
   def race(hero) do
@@ -38,7 +42,11 @@ defmodule Hero do
   end
 
   def race(hero, value) do
-    class_race_and_alignment(hero, Hero.class(hero), value, Hero.alignment(hero))
+    if valid_race?(value) do
+      class_race_and_alignment(hero, Hero.class(hero), value, Hero.alignment(hero))
+    else
+      {:error, "invalid race"}
+    end
   end
 
   def alignment(hero) do
@@ -46,26 +54,19 @@ defmodule Hero do
   end
 
   def alignment(hero, value) do
-    class_race_and_alignment(hero, Hero.class(hero), Hero.race(hero), value)
-  end
-
-  defp class_race_and_alignment(hero, class, race, alignment) do
-    case valid_class_race_alignment_and_combo?(class, race, alignment) do
-      {true, true, true, true} -> {:ok, %{hero | class: class, race: race, alignment: alignment}}
-      {false, true, true, _} -> {:error, "invalid class"}
-      {true, false, true, _} -> {:error, "invalid race"}
-      {true, true, false, _} -> {:error, "invalid alignment"}
-      {_, _, _, _} -> {:error, "invalid class, race, and alignment combo"}
+    if valid_alignment?(value) do
+      class_race_and_alignment(hero, Hero.class(hero), Hero.race(hero), value)
+    else
+      {:error, "invalid alignment"}
     end
   end
 
-  defp valid_class_race_alignment_and_combo?(class, race, alignment) do
-    {
-      valid_class?(class),
-      valid_race?(race),
-      valid_alignment?(alignment),
-      valid_class_race_alignment_combo?(class, race, alignment)
-    }
+  defp class_race_and_alignment(hero, class, race, alignment) do
+    if valid_class_race_alignment_combo?(class, race, alignment) do
+      {:ok, %{hero | class: class, race: race, alignment: alignment}}
+    else
+      {:error, "invalid class, race, and alignment combo"}
+    end
   end
 
   defp valid_alignment?(value) do
