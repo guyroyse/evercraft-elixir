@@ -33,7 +33,7 @@ defmodule Hero do
     if valid_class?(value) do
       class_race_and_alignment(hero, value, Hero.race(hero), Hero.alignment(hero))
     else
-      {:error, "invalid class"}
+      {:error, "class cannot be #{value}"}
     end
   end
 
@@ -45,7 +45,7 @@ defmodule Hero do
     if valid_race?(value) do
       class_race_and_alignment(hero, Hero.class(hero), value, Hero.alignment(hero))
     else
-      {:error, "invalid race"}
+      {:error, "race cannot be #{value}"}
     end
   end
 
@@ -57,15 +57,14 @@ defmodule Hero do
     if valid_alignment?(value) do
       class_race_and_alignment(hero, Hero.class(hero), Hero.race(hero), value)
     else
-      {:error, "invalid alignment"}
+      {:error, "alignment cannot be #{value}"}
     end
   end
 
   defp class_race_and_alignment(hero, class, race, alignment) do
-    if valid_class_race_alignment_combo?(class, race, alignment) do
-      {:ok, %{hero | class: class, race: race, alignment: alignment}}
-    else
-      {:error, "invalid class, race, and alignment combo"}
+    case valid_class_race_alignment_combo(class, race, alignment) do
+      :ok -> {:ok, %{hero | class: class, race: race, alignment: alignment}}
+      error -> {:error, error}
     end
   end
 
@@ -85,23 +84,28 @@ defmodule Hero do
     list |> Enum.filter(&(&1 == value)) |> Enum.empty? == false
   end
 
-  defp valid_class_race_alignment_combo?(class, race, alignment) do
-    valid_class_for_alignment(class, alignment) && valid_race_for_alignment(race, alignment)
+  defp valid_class_race_alignment_combo(class, race, alignment) do
+    case { valid_class_for_alignment(class, alignment), valid_race_for_alignment(race, alignment) } do
+      { :ok, :ok } -> :ok
+      { :ok, error } -> error
+      { error, :ok } -> error
+      _ -> "halfling paladins cannot be evil"
+    end
   end
 
   defp valid_class_for_alignment(class, alignment) do
     case {class, alignment} do
-      {:rogue, :good} -> false
-      {:paladin, :evil} -> false
-      {:paladin, :neutral} -> false
-      {_, _} -> true
+      {:rogue, :good} -> "rogues cannot be good"
+      {:paladin, :evil} -> "paladins must be good"
+      {:paladin, :neutral} -> "paladins must be good"
+      _ -> :ok
     end
   end
 
   defp valid_race_for_alignment(race, alignment) do
     case {race, alignment} do
-      {:halfling, :evil} -> false
-      {_, _} -> true
+      {:halfling, :evil} -> "halflings cannot be evil"
+      _ -> :ok
     end
   end
 
