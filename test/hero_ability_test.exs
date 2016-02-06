@@ -30,19 +30,19 @@ defmodule HeroAbilityTest do
   end
 
   ## when an orc
-  test "when and orc, it has a +2 to str modifier", context do
+  test "when an orc, it has a +2 to str modifier", context do
     {:ok, hero} = Hero.race(context[:subject], :orc)
     assert Hero.Ability.modifier(hero, :str) == +2
   end
-  test "when and orc, it has a -1 to int modifier", context do
+  test "when an orc, it has a -1 to int modifier", context do
     {:ok, hero} = Hero.race(context[:subject], :orc)
     assert Hero.Ability.modifier(hero, :int) == -1
   end
-  test "when and orc, it has a -1 to wis modifier", context do
+  test "when an orc, it has a -1 to wis modifier", context do
     {:ok, hero} = Hero.race(context[:subject], :orc)
     assert Hero.Ability.modifier(hero, :wis) == -1
   end
-  test "when and orc, it has a -1 to cha modifier", context do
+  test "when an orc, it has a -1 to cha modifier", context do
     {:ok, hero} = Hero.race(context[:subject], :orc)
     assert Hero.Ability.modifier(hero, :cha) == -1
   end
